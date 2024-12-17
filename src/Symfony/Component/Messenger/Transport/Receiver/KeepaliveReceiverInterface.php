@@ -14,6 +14,9 @@ namespace Symfony\Component\Messenger\Transport\Receiver;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\TransportException;
 
+/**
+ * @method int|null getKeepaliveInterval() Interval to schedule a SIGALRM signal in seconds.
+ */
 interface KeepaliveReceiverInterface extends ReceiverInterface
 {
     /**

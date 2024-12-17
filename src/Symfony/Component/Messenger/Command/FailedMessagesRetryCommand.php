@@ -250,10 +250,16 @@ EOF
             $this->logger
         );
 
+        $currentKeepaliveInterval = $this->getApplication()->getAlarmInterval();
+        if (!$currentKeepaliveInterval && $keepAliveInterval = $this->worker->keepaliveInterval()) {
+            $this->getApplication()->setAlarmInterval($keepAliveInterval);
+        }
+
         try {
             $this->worker->run();
         } finally {
             $this->worker = null;
+            $this->getApplication()->setAlarmInterval($currentKeepaliveInterval);
             $this->eventDispatcher->removeListener(WorkerMessageReceivedEvent::class, $listener);
         }
 

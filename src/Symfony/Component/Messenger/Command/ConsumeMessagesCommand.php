@@ -250,6 +250,10 @@ EOF
             $options['queues'] = $queues;
         }
 
+        if (!$this->getApplication()->getAlarmInterval() && $keepAliveInterval = $this->worker->keepaliveInterval()) {
+            $this->getApplication()->setAlarmInterval($keepAliveInterval);
+        }
+
         try {
             $this->worker->run($options);
         } finally {

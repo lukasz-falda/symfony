@@ -308,6 +308,23 @@ class Worker
         }
     }
 
+    public function keepaliveInterval(): ?int
+    {
+        $minSeconds = null;
+        foreach ($this->receivers as $receiver) {
+            if (!$receiver instanceof KeepaliveReceiverInterface || !method_exists($receiver, 'getKeepaliveInterval')) {
+                continue;
+            }
+
+            $keepaliveInterval = $receiver->getKeepaliveInterval();
+            if ($keepaliveInterval && $keepaliveInterval > 0) {
+                $minSeconds = min($minSeconds ?? $keepaliveInterval, $keepaliveInterval);
+            }
+        }
+
+        return $minSeconds;
+    }
+
     public function getMetadata(): WorkerMetadata
     {
         return $this->metadata;
